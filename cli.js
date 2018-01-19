@@ -1,3 +1,7 @@
+var Blockchain = require('./Blockchain.js');
+var blockchain = new Blockchain();
+var P2p = require('./P2p.js');
+var p2p = new P2p(blockchain);
 
 function cli(vorpal) {
 	vorpal
@@ -67,8 +71,16 @@ function mineCommand(vorpal) {
 function openCommand(vorpal) {
 	vorpal
 		.command('open <port>', 'Open port to accept incoming connections.')
+		.alias('o')
 		.action(function (args, callback) {
-			this.log('openCommand');
+			if (args.port) {
+				if (typeof args.port === 'number') {
+					p2p.startServer(args.port);
+					this.log('Listening to peers on ' + args.port);
+				} else {
+					this.log('Invalid port!');
+				}
+			}
 			callback();
 		})
 }
