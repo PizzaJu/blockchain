@@ -1,0 +1,17 @@
+{
+  "name": "blockchain",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "peer-exchange": "^2.2.0",
+    "vorpal": "^1.12.0",
+    "wrtc": "0.0.63"
+  },
+  "main": "app.js",
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
