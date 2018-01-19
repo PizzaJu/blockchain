@@ -44,8 +44,9 @@ function discoverCommand(vorpal) {
 function blockchainCommand(vorpal) {
 	vorpal
 		.command('blockchain', 'See the current state of the blockchain.')
+		.alias('b')
 		.action(function (args, callback) {
-			this.log('blockchainCommand');
+			this.log(blockchain);
 			callback();
 		})
 }
