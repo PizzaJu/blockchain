@@ -25,9 +25,16 @@ function welcome(vorpal) {
 
 function connectCommand(vorpal) {
 	vorpal
-		.command('connect', "Connect to a new peer.")
+		.command('connect <host> <port>', "Connect to a new peer.")
+		.alias('c')
 		.action(function (args, callback) {
-			this.log('connectCommand');
+			if (args.host && args.port) {
+				try {
+					p2p.connectToPeer(args.host, args.port);
+				} catch (err) {
+					this.log(err);
+				}
+			}
 			callback();
 		})
 }
@@ -62,11 +69,15 @@ function peersCommand(vorpal) {
 
 function mineCommand(vorpal) {
 	vorpal
-		.command('mine', 'Mine a new block.')
+		.command('mine <data>', 'Mine a new block.Eg: mine hello!')
+		.alias('m')
 		.action(function (args, callback) {
-			this.log('mineCommand');
+			if (args.data) {
+				blockchain.mine(args.data);
+				// p2p.broadcastLatest();
+			}
 			callback();
-		})
+		});
 }
 
 function openCommand(vorpal) {

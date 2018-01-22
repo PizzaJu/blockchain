@@ -24,6 +24,24 @@ class PeerToPeer {
 			.listen(port);
 	}
 
+	connectToPeer(host, port) {
+		const socket = net.connect(port, host, () =>
+			p2p.connect(socket, (err, conn) => {
+				if (err) {
+					throw err;
+				} else {
+					this.initConnection.call(this, conn);
+				}
+			})
+		);
+	}
+
+	initConnection(connection) {
+		this.peers.push(connection);
+		this.initMessageHandler(connection);
+		this.initErrorHandler(connection);
+		this.write(connection, Message.getLatestBlock());
+	}
 }
 
 module.exports = PeerToPeer;
