@@ -17,6 +17,7 @@ class PeerToPeer {
 					if (err) {
 						throw err;
 					} else {
+						// console.log(conn)
 						this.initConnection.call(this, conn);
 					}
 				})
@@ -36,11 +37,28 @@ class PeerToPeer {
 		);
 	}
 
+	write(peer, message) {
+		peer.write(JSON.stringify(message));
+	}
+
 	initConnection(connection) {
 		this.peers.push(connection);
 		this.initMessageHandler(connection);
 		this.initErrorHandler(connection);
 		this.write(connection, Message.getLatestBlock());
+	}
+
+	initMessageHandler(connection) {
+		connection.on("data", data => {
+			const message = JSON.parse(data.toString("utf8"));
+			this.handleMessage(connection, message);
+		});
+	}
+
+	initErrorHandler(connection) {
+		connection.on("error", err => {
+			throw err;
+		})
 	}
 }
 

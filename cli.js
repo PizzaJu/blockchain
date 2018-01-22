@@ -73,7 +73,7 @@ function mineCommand(vorpal) {
 		.alias('m')
 		.action(function (args, callback) {
 			if (args.data) {
-				blockchain.mine(args.data);
+				blockchain.mine(args.data);   //生成区块
 				// p2p.broadcastLatest();
 			}
 			callback();
