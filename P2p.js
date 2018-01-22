@@ -2,6 +2,14 @@ var wrtc = require('wrtc');
 var Exchange = require('peer-exchange');
 var p2p = new Exchange('my own blockchain', { wrtc: wrtc });
 var net =require('net');
+var messageType = require('./message-type.js');
+const {
+	REQUEST_LATEST_BLOCK,
+	RECEIVE_LATEST_BLOCK,
+	REQUEST_BLOCKCHAIN,
+	RECEIVE_BLOCKCHAIN
+} = messageType;
+var Messages = require('./Messages.js')
 
 
 class PeerToPeer {
@@ -45,7 +53,7 @@ class PeerToPeer {
 		this.peers.push(connection);
 		this.initMessageHandler(connection);
 		this.initErrorHandler(connection);
-		this.write(connection, Message.getLatestBlock());
+		this.write(connection, Messages.getLatestBlock());
 	}
 
 	initMessageHandler(connection) {
@@ -53,6 +61,52 @@ class PeerToPeer {
 			const message = JSON.parse(data.toString("utf8"));
 			this.handleMessage(connection, message);
 		});
+	}
+
+	handleMessage(peer, message) {
+		switch (message.type) {
+			case REQUEST_LATEST_BLOCK:
+				this.write(peer, Messages.sendLatestBlock(this.blockchain.latestBlock));
+				break;
+			case REQUEST_BLOCKCHAIN:
+				this.write(peer, Messages.sendBlockchain(this.blockchain.get()));
+				break;
+			case RECEIVE_LATEST_BLOCK:
+				this.handleReceivedLatestBlock(message, peer);
+				break;
+			case RECEIVE_BLOCKCHAIN:
+				this.handleReceivedBlockchain(message);
+				break;
+			default:
+				throw "Received invalid message.";
+		}
+	}
+
+	handleReceivedLatestBlock(message, peer) {
+		const recervedBlock = message.data;
+		const latestBlock = this.blockchain.latestBlock;
+
+		if (latestBlock.hash === recerivedBlock.previousHash) {
+			try {
+				this.blockchain.addBlock(receivedBlock);
+			} catch(err) {
+				throw err;
+			}
+		} else if (receivedBlock.index > latestBlock.index) {
+			this.write(peer, Messages.getBlockchain());
+		} else {
+			// Do nothing
+		}
+	}
+
+	handleReceivedBlockchain(message) {
+		const receivedChain = message.data;
+
+		try {
+			this.blockchain.replaceChain(reveivedChain);
+		} catch(err) {
+			throw err;
+		}
 	}
 
 	initErrorHandler(connection) {
