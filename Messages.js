@@ -1,9 +1,9 @@
 const messageType = require('./message-type.js');
 const {
-	REQUEST_LATEST_BLOCK,
-	RECEIVE_LATEST_BLOCK,
-	REQUEST_BLOCKCHAIN,
-	RECEIVE_BLOCKCHAIN
+	REQUEST_LATEST_BLOCK,   // 0
+	RECEIVE_LATEST_BLOCK,   // 1
+	REQUEST_BLOCKCHAIN,     // 2
+	RECEIVE_BLOCKCHAIN      // 3
 } = messageType;
 
 class Messages {

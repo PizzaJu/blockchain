@@ -45,6 +45,14 @@ class PeerToPeer {
 		);
 	}
 
+	broadcastLatest() {
+		this.broadcast(Messages.sendLatestBlock(this.blockchain.latestBlock));
+	}
+
+	broadcast(message) {
+		this.peers.forEach(peer => this.write(peer, message));
+	}
+
 	write(peer, message) {
 		peer.write(JSON.stringify(message));
 	}
@@ -83,10 +91,10 @@ class PeerToPeer {
 	}
 
 	handleReceivedLatestBlock(message, peer) {
-		const recervedBlock = message.data;
+		const receivedBlock = message.data;
 		const latestBlock = this.blockchain.latestBlock;
 
-		if (latestBlock.hash === recerivedBlock.previousHash) {
+		if (latestBlock.hash === receivedBlock.previousHash) {
 			try {
 				this.blockchain.addBlock(receivedBlock);
 			} catch(err) {

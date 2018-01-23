@@ -7,7 +7,6 @@ function cli(vorpal) {
 	vorpal
 		.use(welcome)
 		.use(connectCommand)
-		.use(discoverCommand)
 		.use(blockchainCommand)
 		.use(peersCommand)
 		.use(mineCommand)
@@ -39,15 +38,6 @@ function connectCommand(vorpal) {
 		})
 }
 
-function discoverCommand(vorpal) {
-	vorpal
-		.command('discover', "Discover new peers from your connected peers.")
-		.action(function (args, callback) {
-			this.log('discoverCommand');
-			callback();
-		})
-}
-
 function blockchainCommand(vorpal) {
 	vorpal
 		.command('blockchain', 'See the current state of the blockchain.')
@@ -74,7 +64,7 @@ function mineCommand(vorpal) {
 		.action(function (args, callback) {
 			if (args.data) {
 				blockchain.mine(args.data);   //生成区块
-				// p2p.broadcastLatest();
+				p2p.broadcastLatest();
 			}
 			callback();
 		});
