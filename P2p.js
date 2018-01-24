@@ -14,14 +14,14 @@ var Messages = require('./Messages.js')
 
 class PeerToPeer {
 	constructor(blockchain) {
-		this.peers = [];
+		this.peers = [];   //P2P通道列表
 		this.blockchain = blockchain;
 	}
 
 	startServer(port) {
 		var server = net
 			.createServer (socket =>
-				p2p.accept(socket, (err, conn) => {
+				p2p.accept(socket, (err, conn) => {   //outgoing connection
 					if (err) {
 						throw err;
 					} else {
@@ -35,7 +35,7 @@ class PeerToPeer {
 
 	connectToPeer(host, port) {
 		const socket = net.connect(port, host, () =>
-			p2p.connect(socket, (err, conn) => {
+			p2p.connect(socket, (err, conn) => {    //incoming connection
 				if (err) {
 					throw err;
 				} else {
@@ -45,11 +45,11 @@ class PeerToPeer {
 		);
 	}
 
-	broadcastLatest() {
+	broadcastLatest() {     //广播消息
 		this.broadcast(Messages.sendLatestBlock(this.blockchain.latestBlock));
 	}
 
-	broadcast(message) {
+	broadcast(message) {      //向每个P2P通道都传递消息
 		this.peers.forEach(peer => this.write(peer, message));
 	}
 

@@ -35,7 +35,7 @@ class Blockchain {
 		);
 	}
 
-	calculateHash(index, previousHash, timestamp, data, nonce) {
+	calculateHash(index, previousHash, timestamp, data, nonce) {    //计算Hash值
 		return crypto
 			.createHash('sha256')
 			.update(index + previousHash + timestamp + data + nonce)
