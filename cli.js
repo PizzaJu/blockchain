@@ -52,9 +52,12 @@ function peersCommand(vorpal) {
 	vorpal
 		.command('peers', 'Get the list of connected peers.')
 		.action(function (args, callback) {
-			this.log('peersCommand');
+			// this.log(p2p.peers);
+			p2p.peers.forEach(peer => {
+				this.log(`${peer.pxpPeer.socket._host} \n`);
+			});
 			callback();
-		})
+		});
 }
 
 function mineCommand(vorpal) {
